@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center|top"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/logView"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_gravity="top"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/logo_world" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="30dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:text="Location"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonObtainLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_horizontal"
+            android:text="Obtain location" />
+
+        <EditText
+            android:id="@+id/editTextPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="Phone number"
+            android:inputType="phone"
+            android:minHeight="48dp"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/buttonSendLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Send location" />
+    </LinearLayout>
+
+
+</LinearLayout>
