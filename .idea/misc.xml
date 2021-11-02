@@ -3,6 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Dierick/Design/AppGPS_Design/app/src/main/res/drawable/button_rounded.xml" value="0.12008547008547009" />
+        <entry key="..\:/Users/Dierick/Design/AppGPS_Design/app/src/main/res/drawable/ic_baseline_login_white_24.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/Dierick/Design/AppGPS_Design/app/src/main/res/layout/activity_login.xml" value="0.1517094017094017" />
+        <entry key="..\:/Users/Dierick/Design/AppGPS_Design/app/src/main/res/layout/activity_main.xml" value="0.20854700854700856" />
+        <entry key="..\:/Users/Dierick/Design/AppGPS_Design/app/src/main/res/menu/menu_main.xml" value="0.264" />
         <entry key="..\:/Users/dieri/Design/GPS_Location_SMS/app/src/main/res/layout/activity_main.xml" value="0.152" />
       </map>
     </option>

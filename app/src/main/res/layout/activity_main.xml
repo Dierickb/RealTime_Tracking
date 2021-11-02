@@ -37,29 +37,18 @@
 
         <Button
             android:id="@+id/buttonObtainLocation"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_horizontal"
             android:text="Obtain location" />
 
-        <EditText
-            android:id="@+id/editTextPhone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:ems="10"
-            android:hint="Phone number"
-            android:inputType="phone"
-            android:minHeight="48dp"
-            android:textAlignment="center" />
-
         <Button
-            android:id="@+id/buttonSendLocation"
-            android:layout_width="wrap_content"
+            android:id="@+id/buttonEndLocation"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Send location" />
+            android:layout_gravity="center|center_horizontal"
+            android:text="End Location" />
+
     </LinearLayout>
 
 

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Taxi Flow</string>
+    <string name="taxiflowlogo">TAXIFLOWLOGO</string>
+    <string name="escribe_tu_taxi_id">Escribe tu Taxi ID</string>
+    <string name="name">Name</string>
+    <string name="placa">Placa</string>
+    <string name="enviar_datos">ENVIAR DATOS</string>
 </resources>
