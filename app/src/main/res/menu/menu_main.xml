@@ -3,10 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/login_menu"
+        android:id="@+id/bluethoot_menu"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_login_white_24"
-        android:title="Login_menu"
+        android:icon="@drawable/ic_baseline_bluetooth_24"
+        android:title="@string/bluethoot_menu"
         android:visible="true"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/login_menu_back"
+        android:enabled="true"
+        android:icon="@drawable/login1"
+        android:title="@string/login_menu"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
 </menu>

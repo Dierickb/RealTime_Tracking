@@ -5,4 +5,6 @@
     <string name="name">Name</string>
     <string name="placa">Placa</string>
     <string name="enviar_datos">ENVIAR DATOS</string>
+    <string name="bluethoot_menu">Bluethoot_menu</string>
+    <string name="login_menu">Login_menu</string>
 </resources>

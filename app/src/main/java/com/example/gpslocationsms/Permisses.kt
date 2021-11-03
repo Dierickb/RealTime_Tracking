@@ -1,5 +1,6 @@
 package com.example.gpslocationsms
 
+import android.Manifest
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,7 +13,8 @@ class PermissionLocationRequester(
 ) {
     private var onGranted: () -> Unit = {}
 
-    private val permissionLauncher = activity.registerForActivityResult(ActivityResultContracts.RequestPermission()){ isGranted ->
+    private val permissionLauncher = activity.registerForActivityResult(
+        ActivityResultContracts.RequestPermission()){ isGranted ->
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             when{
                 isGranted -> onGranted()
@@ -35,7 +37,8 @@ class PermissionSendMessageRequester(
     private val onDenied: () -> Unit = {}
 ) {
     private var onGranted: () -> Unit = {}
-    private val permissionLauncher = activity.registerForActivityResult(ActivityResultContracts.RequestPermission()){ isGranted ->
+    private val permissionLauncher = activity.registerForActivityResult(
+        ActivityResultContracts.RequestPermission()){ isGranted ->
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             when{
                 isGranted -> onGranted()
