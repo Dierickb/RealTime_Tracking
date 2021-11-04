@@ -29,9 +29,9 @@
         <TextView
             android:id="@+id/tvRpm"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:textAlignment="center"
-            android:text="rpm" />
+            android:layout_height="36dp"
+            android:text="@string/rpm"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/textViewLocation"
@@ -40,7 +40,7 @@
             android:layout_gravity="center"
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
-            android:text="Location"
+            android:text="@string/location"
             android:textAlignment="center"
             android:textSize="20sp" />
 
@@ -49,8 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_horizontal"
-            android:text="Obtain location"
-            android:textColor="#000000"
+            android:text="@string/send_data"
+            android:textColor="#FFFFFF"
             tools:ignore="TextContrastCheck" />
 
         <Button
@@ -58,8 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_horizontal"
-            android:text="End Location"
-            android:textColor="#000000"
+            android:text="@string/stop"
+            android:textColor="#FFFFFF"
             tools:ignore="TextContrastCheck" />
 
     </LinearLayout>

@@ -13,13 +13,13 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
-import kotlinx.coroutines.*
 import java.util.*
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Handler
 import android.os.Looper
+import androidx.core.content.ContextCompat
 import com.example.gpslocationsms.UserLoginApplication.Companion.prefs
 import com.github.pires.obd.commands.SpeedCommand
 import com.github.pires.obd.commands.engine.RPMCommand
@@ -32,9 +32,9 @@ import com.github.pires.obd.commands.protocol.TimeoutCommand
 import com.github.pires.obd.commands.temperature.AmbientAirTemperatureCommand
 import com.github.pires.obd.enums.ObdProtocols
 
-
 class MainActivity : AppCompatActivity() {
 
+    private var bluetoothIcon = false
     private lateinit var locationCallback: LocationCallback
     private lateinit var locationRequest: LocationRequest
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -70,6 +70,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+
+        setBluetoothIcon(menu.findItem(R.id.bluethoot_menu)!!)
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -83,6 +86,8 @@ class MainActivity : AppCompatActivity() {
 
         when(item.itemId){
             R.id.bluethoot_menu -> {
+                bluetoothIcon = !bluetoothIcon
+                setBluetoothIcon(item)
                 startBluetooth()
             }
         }
@@ -102,11 +107,6 @@ class MainActivity : AppCompatActivity() {
 
         getLocationUpdates()
 
-        GlobalScope.launch(Dispatchers.Main) {
-            withContext(Dispatchers.Main){
-            }
-        }
-
         getLocation.setOnClickListener{
             coarseLocationPermission.runWithPermission{
                 coarseLocationPermissionBackground.runWithPermission {
@@ -119,8 +119,12 @@ class MainActivity : AppCompatActivity() {
                     }else{
 
                         try {
+
                             val host = arrayListOf(
-                                "34.211.44.164",
+                                "34.209.26.69",
+                                "186.114.164.166",
+                                "190.84.119.89",
+                                "54.189.98.176",
                             )
 
                             host.forEach { socketUDP.add(SocketUDP(it, 9000)) }
@@ -136,8 +140,6 @@ class MainActivity : AppCompatActivity() {
                             toastShort("Debe Introducir un número puerto")
                         }
                     }
-
-
 
                 }
             }
@@ -181,12 +183,10 @@ class MainActivity : AppCompatActivity() {
 
                         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                             if (location != null ) {
-
                                 if (conected){
-                                    socketUDP.forEach { it.send("${location.latitude},${location.longitude}, ${location.time}," +
-                                            " ${rpmCommand.rpm}") }
+                                    socketUDP.forEach { it.send("${"%.7f".format(location.latitude)},${"%.7f".format(location.longitude)},${location.time},${rpmCommand.rpm}") }
                                 }else{
-                                    socketUDP.forEach { it.send("${location.latitude},${location.longitude}, ${location.time}, 0") }
+                                    socketUDP.forEach { it.send("${"%.7f".format(location.latitude)},${"%.7f".format(location.longitude)},${location.time},0") }
                                 }
                                 findViewById<TextView>(R.id.textViewLocation).text = ("${location.latitude}, ${location.longitude}")
                                 toastShort("Ubicación enviada")
@@ -194,8 +194,6 @@ class MainActivity : AppCompatActivity() {
                             } else {
                                 toastShort("Ubicación desconocida, no se ha enviado la ubicación")
                             }
-
-
                         }
                     }
                 }
@@ -268,7 +266,7 @@ class MainActivity : AppCompatActivity() {
                     thread.start()
                 }
             }else{
-                toastShort("favor conectarse desde las configuraciones")
+                toastShort("Conecte el dispositivo manualmente desde configuraciones")
             }
 
         }else{
@@ -280,6 +278,14 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    private fun setBluetoothIcon(menuItem: MenuItem){
+        val id = if(bluetoothIcon){
+            R.drawable.ic_baseline_bluetooth_connected_24
+        }else {R.drawable.ic_baseline_bluetooth_24}
+
+        menuItem.icon = ContextCompat.getDrawable(this, id )
     }
 
 }

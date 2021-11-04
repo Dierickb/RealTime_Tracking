@@ -9,4 +9,8 @@
     <string name="login_menu">Login_menu</string>
     <string name="identificaci_n">Identificación</string>
     <string name="identificacion">Identificacion</string>
+    <string name="stop">STOP</string>
+    <string name="send_data">Send data</string>
+    <string name="location">Location</string>
+    <string name="rpm">rpm</string>
 </resources>

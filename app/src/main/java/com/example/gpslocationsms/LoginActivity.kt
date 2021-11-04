@@ -39,9 +39,6 @@ class LoginActivity : AppCompatActivity() {
             if(accesToDetail()){
                 goToMain()
             }
-            val name = findViewById<EditText>(R.id.etName)
-            prefs.saveUser(name.text.toString())
-            toastLong(name.text.toString())
         }
     }
 
