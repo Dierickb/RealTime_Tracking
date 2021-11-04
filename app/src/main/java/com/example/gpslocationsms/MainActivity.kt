@@ -97,70 +97,10 @@ class MainActivity : AppCompatActivity() {
 
         val getLocation = findViewById<Button>(R.id.buttonObtainLocation)
         val endGettingLocation = findViewById<Button>(R.id.buttonEndLocation)
-        val btBtn = findViewById<Button>(R.id.bluetooth)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         getLocationUpdates()
-
-        btBtn.setOnClickListener{
-            it.isEnabled = false
-            if (!conected){
-                var deviceHardwareAddress:String? = null
-                val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
-                if (bluetoothAdapter?.isEnabled == false) {
-                    val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
-                }
-                val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
-                pairedDevices?.forEach { device ->
-                    val deviceName = device.name
-                    if (deviceName == "OBDII"){
-                        println("$deviceName ")
-                        deviceHardwareAddress = device.address // MAC address
-                    }
-                }
-                if(deviceHardwareAddress != null) {
-                    val bluetoothDevice =  bluetoothAdapter?.getRemoteDevice(deviceHardwareAddress)
-                    if (bluetoothDevice != null) {
-                        val thread = Thread{
-                            try {
-                                socketBt = bluetooth.connect(bluetoothDevice)!!
-                                threadBT = bluetooth.ConnectedThread(socketBt)
-                                conected = true
-                                try {
-                                    EchoOffCommand().run(socketBt.inputStream, socketBt.outputStream)
-                                    LineFeedOffCommand().run(socketBt.inputStream, socketBt.outputStream)
-                                    TimeoutCommand(125).run(socketBt.inputStream, socketBt.outputStream)
-                                    SelectProtocolCommand(ObdProtocols.AUTO).run(socketBt.inputStream, socketBt.outputStream)
-                                    AmbientAirTemperatureCommand().run(socketBt.inputStream, socketBt.outputStream)
-                                } catch (e: Exception) {
-                                    // handle errors
-                                }
-                            }catch (e: IOException) {
-                                e.printStackTrace()
-                            }
-                            runOnUiThread(Runnable { btBtn.isEnabled = true })
-                        }
-                        thread.start()
-                    }
-                }else{
-                    toastShort("favor conectarse desde las configuraciones")
-                    btBtn.isEnabled = true
-                }
-
-            }else{
-                if (::threadBT.isInitialized){
-                    val res = threadBT.cancel()
-                    toast("$res")
-                    if (res) {
-                        conected = false
-                    }
-                }
-                btBtn.isEnabled = true
-            }
-        }
-
 
         GlobalScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.Main){
