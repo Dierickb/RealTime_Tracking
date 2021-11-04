@@ -7,4 +7,6 @@
     <string name="enviar_datos">ENVIAR DATOS</string>
     <string name="bluethoot_menu">Bluethoot_menu</string>
     <string name="login_menu">Login_menu</string>
+    <string name="identificaci_n">Identificación</string>
+    <string name="identificacion">Identificacion</string>
 </resources>

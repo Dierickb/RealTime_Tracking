@@ -27,6 +27,12 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tvRpm"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="rpm" />
+
+        <TextView
             android:id="@+id/textViewLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,6 +60,12 @@
             android:text="End Location"
             android:textColor="#000000"
             tools:ignore="TextContrastCheck" />
+
+        <Button
+            android:id="@+id/bluetooth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button" />
 
     </LinearLayout>
 
