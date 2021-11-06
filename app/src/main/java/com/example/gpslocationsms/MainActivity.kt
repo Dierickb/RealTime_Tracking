@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
             coarseLocationPermission.runWithPermission{
                 coarseLocationPermissionBackground.runWithPermission {
 
-                    if( ( prefs.getIdDriver()==0 ||
+                    if( ( prefs.getIdDriver().isEmpty() ||
                                 prefs.getPlaca().isEmpty())){
                         goToLogin()
                         toastLong("Es necesario que se registre")

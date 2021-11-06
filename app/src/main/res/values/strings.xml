@@ -13,4 +13,5 @@
     <string name="send_data">Send data</string>
     <string name="location">Location</string>
     <string name="rpm">rpm</string>
+    <string name="logoimage">LogoImage</string>
 </resources>

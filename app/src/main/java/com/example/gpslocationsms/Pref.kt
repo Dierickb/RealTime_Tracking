@@ -11,24 +11,24 @@ class Prefs(val context: Context) {
 
     val storage = context.getSharedPreferences(SHARED_NAME,0)
 
-    fun saveUser(name:String){
-        storage.edit().putString(SHARED_USER_NAME, name).apply()
-    }
     fun savePlaca(placa:String){
         storage.edit().putString(SHARED_PLACA, placa).apply()
     }
-    fun saveIdDriver(idDriver:Int){
-        storage.edit().putInt(SHARED_ID_DRIVER, idDriver).apply()
+    fun saveIdDriver(idDriver:String){
+        storage.edit().putString(SHARED_ID_DRIVER, idDriver).apply()
+    }
+    fun saveDrivingName(drivingName:String){
+        storage.edit().putString(SHARED_USER_NAME, drivingName).apply()
     }
 
-    fun getUser():String{
-        return storage.getString(SHARED_NAME, "")!!
-    }
     fun getPlaca():String{
         return storage.getString(SHARED_PLACA, "")!!
     }
-    fun getIdDriver():Int{
-        return storage.getInt(SHARED_ID_DRIVER, 0)
+    fun getIdDriver():String{
+        return storage.getString(SHARED_ID_DRIVER, "")!!
+    }
+    fun getUserName():String{
+        return storage.getString(SHARED_USER_NAME, "")!!
     }
 
 
