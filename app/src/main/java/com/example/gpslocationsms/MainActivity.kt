@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var timer: Timer
     private var socketUDP = arrayListOf<SocketUDP>()
     private var started: Boolean = false
+    var bluetoothsending: Boolean = false
     private val REQUEST_ENABLE_BT = 1234
     private val bluetooth:Bluetooth = Bluetooth(handler = Handler(Looper.getMainLooper()))
     private lateinit var socketBt: BluetoothSocket
@@ -93,7 +94,12 @@ class MainActivity : AppCompatActivity() {
         when(item.itemId){
 
             R.id.bluethoot_menu -> {
-                startBluetooth()
+                if(conected){
+                    toastShort("OBDII is conected")
+                }else{
+                    startBluetooth()
+                }
+                //startBluetooth()
                 setBluetoothIcon(item)
             }
         }
@@ -137,7 +143,7 @@ class MainActivity : AppCompatActivity() {
                             socketUDP.forEach{it.start()}
                             timer = Timer()
                             val dierickTimer = initLocation()
-                            timer.scheduleAtFixedRate(dierickTimer, 1000, 5000)
+                            timer.scheduleAtFixedRate(dierickTimer, 1000, 3000)
                             started = true
                         }catch (e: IOException){
                             e.printStackTrace()
@@ -183,7 +189,6 @@ class MainActivity : AppCompatActivity() {
                                 speedCommand.run(socketBt.inputStream, socketBt.outputStream)
                                 ("RPM: " +rpmCommand.formattedResult).also{tvRpm.text = it}
                             }catch(e: IOException){
-
                             }
                         }
 
@@ -195,7 +200,7 @@ class MainActivity : AppCompatActivity() {
                                     socketUDP.forEach { it.send("${"%.7f".format(location.latitude)},${"%.7f".format(location.longitude)},${location.time},0") }
                                 }
                                 findViewById<TextView>(R.id.textViewLocation).text = ("${location.latitude}, ${location.longitude}")
-                                toastShort("Ubicación enviada")
+                                // toastShort("Ubicación enviada")
 
                             } else {
                                 toastShort("Ubicación desconocida, no se ha enviado la ubicación")
@@ -292,10 +297,12 @@ class MainActivity : AppCompatActivity() {
         bluetoothIcon = bluetoothAdapter?.isEnabled != false
 
         if(bluetoothIcon){//bluetooth on
-            id = R.drawable.ic_baseline_bluetooth_24
-            if(conected){//bluetooth unpair
+            id = if(conected){//bluetooth pair
+                R.drawable.ic_baseline_bluetooth_connected_24
+
+            }else {
                 R.drawable.ic_baseline_bluetooth_24
-            }else {R.drawable.ic_baseline_bluetooth_connected_24}//bluetooth pair
+            }//bluetooth unpair
             menuItem.icon = ContextCompat.getDrawable(this, id )
         }else{//bluetooth off
             id = R.drawable.ic_baseline_bluetooth_disabled_24
