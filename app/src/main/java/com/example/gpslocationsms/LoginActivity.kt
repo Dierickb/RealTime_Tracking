@@ -25,12 +25,11 @@ class LoginActivity : AppCompatActivity() {
         val tvPlaca = findViewById<TextView>(R.id.tvPlaca)
         val tvName = findViewById<TextView>(R.id.tvName)
         val tvIdDriver = findViewById<TextView>(R.id.tvIdDriver)
-        if( (prefs.getIdDriver().isEmpty() ||
-                    prefs.getPlaca().isEmpty()) ){
-        }else{
-            tvPlaca.text = ("Placa: " + prefs.getPlaca()).uppercase(Locale.getDefault())
+        if (prefs.getUserName().isNotEmpty() && prefs.getIdDriver().isNotEmpty()
+            && prefs.getPlaca().isNotEmpty()) {
+            tvPlaca.text = ("Placa: " + prefs.getPlaca())
             tvIdDriver.text = ("ID: "+prefs.getIdDriver())
-            tvName.text = ("Nombre: "+prefs.getUserName()).uppercase(Locale.getDefault())
+            tvName.text = ("Nombre: "+prefs.getUserName())
         }
     }
 
@@ -50,16 +49,15 @@ class LoginActivity : AppCompatActivity() {
         val idDriver = findViewById<EditText>(R.id.etIdTaxi)
         val placaTaxi = findViewById<EditText>(R.id.etPlaca)
 
-        saved = if( (name.text.isEmpty() || idDriver.text.isEmpty() ||
-                    placaTaxi.text.isEmpty())){
-            toastLong("Datos vacios o invalidos")
-            false
-        }else{
-            prefs.savePlaca(placaTaxi.text.toString())
+        saved = if (name.text.isNotEmpty() && idDriver.text.isNotEmpty() && placaTaxi.text.isNotEmpty()) {
+            prefs.savePlaca(placaTaxi.text.toString().uppercase(Locale.getDefault()))
             prefs.saveIdDriver(idDriver.text.toString())
-            prefs.saveDrivingName(name.text.toString())
+            prefs.saveDrivingName(name.text.toString().uppercase(Locale.getDefault()))
             toast("Los datos han sido guardados")
             true
+        } else {
+            toastLong("Datos vacios o invalidos")
+            false
         }
         return saved
     }

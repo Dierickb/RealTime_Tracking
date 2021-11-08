@@ -17,6 +17,7 @@ import java.util.*
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import androidx.core.content.ContextCompat
@@ -34,7 +35,7 @@ import com.github.pires.obd.enums.ObdProtocols
 
 class MainActivity : AppCompatActivity() {
 
-    private var bluetoothIcon = false
+    var bluetoothIcon: Boolean = true
     private lateinit var locationCallback: LocationCallback
     private lateinit var locationRequest: LocationRequest
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -55,24 +56,29 @@ class MainActivity : AppCompatActivity() {
             toastLong("Dirijase a permisos, en location y active la localización para obtener su ubicación")}
     )
 
-    private val coarseLocationPermissionBackground = PermissionLocationRequester(
-        this,
-        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-        onRationale = {toastLong("Para usar la aplicación active los permisos de segundo plano")},
-        onDenied = {openAppSettings()
-            toastLong("Dirijase a permisos, en location y active la localización en segundo plano para obtener su ubicación")}
-    )
+    private val coarseLocationPermissionBackground = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        PermissionLocationRequester(
+            this,
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+            onRationale = {toastLong("Para usar la aplicación active los permisos de segundo plano")},
+            onDenied = {openAppSettings()
+                toastLong("Dirijase a permisos, en location y active la localización en segundo plano para obtener su ubicación")}
+        )
+    } else {
+        TODO("VERSION.SDK_INT < Q")
+    }
 
-    fun goToLogin(){
+    private fun goToLogin(){
         startActivity(Intent(applicationContext,
             LoginActivity::class.java))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+        bluetoothIcon = bluetoothAdapter?.isEnabled != false
+
         menuInflater.inflate(R.menu.menu_main, menu)
-
         setBluetoothIcon(menu.findItem(R.id.bluethoot_menu)!!)
-
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -85,10 +91,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         when(item.itemId){
+
             R.id.bluethoot_menu -> {
-                bluetoothIcon = !bluetoothIcon
-                setBluetoothIcon(item)
                 startBluetooth()
+                setBluetoothIcon(item)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -229,10 +235,11 @@ class MainActivity : AppCompatActivity() {
         if (!conected){
             var deviceHardwareAddress:String? = null
             val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
-            if (bluetoothAdapter?.isEnabled == false) {
+            if (bluetoothAdapter?.isEnabled == false) {//bluetooth down
                 val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
             }
+
             val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
             pairedDevices?.forEach { device ->
                 val deviceName = device.name
@@ -268,7 +275,6 @@ class MainActivity : AppCompatActivity() {
             }else{
                 toastShort("Conecte el dispositivo manualmente desde configuraciones")
             }
-
         }else{
             if (::threadBT.isInitialized){
                 val res = threadBT.cancel()
@@ -281,11 +287,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setBluetoothIcon(menuItem: MenuItem){
-        val id = if(bluetoothIcon){
-            R.drawable.ic_baseline_bluetooth_connected_24
-        }else {R.drawable.ic_baseline_bluetooth_24}
+        val id: Int
+        val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+        bluetoothIcon = bluetoothAdapter?.isEnabled != false
 
-        menuItem.icon = ContextCompat.getDrawable(this, id )
+        if(bluetoothIcon){//bluetooth on
+            id = R.drawable.ic_baseline_bluetooth_24
+            if(conected){//bluetooth unpair
+                R.drawable.ic_baseline_bluetooth_24
+            }else {R.drawable.ic_baseline_bluetooth_connected_24}//bluetooth pair
+            menuItem.icon = ContextCompat.getDrawable(this, id )
+        }else{//bluetooth off
+            id = R.drawable.ic_baseline_bluetooth_disabled_24
+            menuItem.icon = ContextCompat.getDrawable(this, id )
+        }
+
     }
 
 }
