@@ -7,31 +7,31 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
-import java.util.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import android.content.pm.PackageManager
-import android.location.Location
-import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import androidx.core.content.ContextCompat
 import com.example.gpslocationsms.UserLoginApplication.Companion.prefs
 import com.github.pires.obd.commands.SpeedCommand
 import com.github.pires.obd.commands.engine.RPMCommand
-import com.google.android.gms.location.*
-import java.io.IOException
 import com.github.pires.obd.commands.protocol.EchoOffCommand
 import com.github.pires.obd.commands.protocol.LineFeedOffCommand
 import com.github.pires.obd.commands.protocol.SelectProtocolCommand
 import com.github.pires.obd.commands.protocol.TimeoutCommand
 import com.github.pires.obd.commands.temperature.AmbientAirTemperatureCommand
 import com.github.pires.obd.enums.ObdProtocols
+import com.google.android.gms.location.*
+import java.io.IOException
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -57,22 +57,13 @@ class MainActivity : AppCompatActivity() {
             toastLong("Dirijase a permisos, en location y active la localización para obtener su ubicación")}
     )
 
-    private val coarseLocationPermissionBackground = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        PermissionLocationRequester(
-            this,
-            Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-            onRationale = {toastLong("Para usar la aplicación active los permisos de segundo plano")},
-            onDenied = {openAppSettings()
-                toastLong("Dirijase a permisos, en location y active la localización en segundo plano para obtener su ubicación")}
-        )
-    } else {
-        TODO("VERSION.SDK_INT < Q")
-    }
-
-    private fun goToLogin(){
-        startActivity(Intent(applicationContext,
-            LoginActivity::class.java))
-    }
+    private val coarseLocationPermissionBackground = PermissionLocationRequester(
+        this,
+        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+        onRationale = {toastLong("Para usar la aplicación active los permisos de segundo plano")},
+        onDenied = {openAppSettings()
+            toastLong("Dirijase a permisos, en location y active la localización en segundo plano para obtener su ubicación")}
+    )
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
@@ -94,11 +85,13 @@ class MainActivity : AppCompatActivity() {
         when(item.itemId){
 
             R.id.bluethoot_menu -> {
+
                 if(conected){
                     toastShort("OBDII is conected")
                 }else{
                     startBluetooth()
                 }
+
                 //startBluetooth()
                 setBluetoothIcon(item)
             }
@@ -106,7 +99,6 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -133,10 +125,12 @@ class MainActivity : AppCompatActivity() {
                         try {
 
                             val host = arrayListOf(
-                                "34.209.26.69",
-                                "186.114.164.166",
-                                "190.84.119.89",
-                                "54.189.98.176",
+                                "186.168.205.147",//ange
+                                "52.36.130.180",//dierick
+                                "54.203.181.33",//juan diego
+                                "52.12.154.26",//cristian
+                                "52.25.90.86",//ange
+                                "35.166.68.205",//nico
                             )
 
                             host.forEach { socketUDP.add(SocketUDP(it, 9000)) }
@@ -192,12 +186,14 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
 
+                        var placa = prefs.getPlaca()
+
                         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                             if (location != null ) {
                                 if (conected){
-                                    socketUDP.forEach { it.send("${"%.7f".format(location.latitude)},${"%.7f".format(location.longitude)},${location.time},${rpmCommand.rpm}") }
+                                    socketUDP.forEach { it.send("${"%.7f".format(location.latitude)},${"%.7f".format(location.longitude)},${location.time},$placa,${rpmCommand.rpm}") }
                                 }else{
-                                    socketUDP.forEach { it.send("${"%.7f".format(location.latitude)},${"%.7f".format(location.longitude)},${location.time},0") }
+                                    socketUDP.forEach { it.send("${"%.7f".format(location.latitude)},${"%.7f".format(location.longitude)},${location.time},$placa,0") }
                                 }
                                 findViewById<TextView>(R.id.textViewLocation).text = ("${location.latitude}, ${location.longitude}")
                                 // toastShort("Ubicación enviada")
@@ -309,6 +305,11 @@ class MainActivity : AppCompatActivity() {
             menuItem.icon = ContextCompat.getDrawable(this, id )
         }
 
+    }
+
+    private fun goToLogin(){
+        startActivity(Intent(this,
+            LoginActivity::class.java))
     }
 
 }

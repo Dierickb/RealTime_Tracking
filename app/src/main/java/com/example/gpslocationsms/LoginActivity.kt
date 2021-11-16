@@ -1,11 +1,11 @@
 package com.example.gpslocationsms
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.gpslocationsms.UserLoginApplication.Companion.prefs
 import java.util.*
 
@@ -15,9 +15,8 @@ class LoginActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        initUI()
-
         checkUserValues()
+        initUI()
 
     }
 
@@ -25,7 +24,8 @@ class LoginActivity : AppCompatActivity() {
         val tvPlaca = findViewById<TextView>(R.id.tvPlaca)
         val tvName = findViewById<TextView>(R.id.tvName)
         val tvIdDriver = findViewById<TextView>(R.id.tvIdDriver)
-        if (prefs.getUserName().isNotEmpty() && prefs.getIdDriver().isNotEmpty()
+        if (prefs.getUserName().isNotEmpty() &&
+            prefs.getIdDriver().isNotEmpty()
             && prefs.getPlaca().isNotEmpty()) {
             tvPlaca.text = ("Placa: " + prefs.getPlaca())
             tvIdDriver.text = ("ID: "+prefs.getIdDriver())
@@ -49,7 +49,9 @@ class LoginActivity : AppCompatActivity() {
         val idDriver = findViewById<EditText>(R.id.etIdTaxi)
         val placaTaxi = findViewById<EditText>(R.id.etPlaca)
 
-        saved = if (name.text.isNotEmpty() && idDriver.text.isNotEmpty() && placaTaxi.text.isNotEmpty()) {
+        saved = if (name.text.isNotEmpty()
+            && idDriver.text.isNotEmpty()
+            && placaTaxi.text.isNotEmpty()) {
             prefs.savePlaca(placaTaxi.text.toString().uppercase(Locale.getDefault()))
             prefs.saveIdDriver(idDriver.text.toString())
             prefs.saveDrivingName(name.text.toString().uppercase(Locale.getDefault()))
@@ -63,6 +65,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun goToMain(){
+
         startActivity(Intent(applicationContext,
             MainActivity::class.java))
     }
